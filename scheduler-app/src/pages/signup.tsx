@@ -1,28 +1,42 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import validator from 'validator';
 
 import './signup.css';
 
 
 
 const SignUpPage = () => {
+  const [password, setPassword] = useState('');
+  const [errorMessagePass, setErrorMessagePass] = useState<string | null>(null);
+  const [errorMessagePassConfirm, setErrorMessagePassConfirm] = useState<string | null>(null);
+  const [errorMessageEmail, setErrorMessageEmail] = useState<string | null>(null);
 
-  const [values, setValues] = useState({
+  let valid = true;
+
+  const [data, setData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
     confirmPassword: ''
-  });
+  })
 
-  const handleChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [e.target.name]: [e.target.value] });
+  const handlePasswordSet = (event: any) => {
+
   }
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleChanges = (e: any) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  }
+
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(values);
+    if (valid) {
+      console.log(data)
+    }
+
   }
 
   return (
@@ -30,20 +44,21 @@ const SignUpPage = () => {
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="firstName">First Name</label>
-        <input type="text" id="firstName" name="firstName" required
+        <input type="text" id="firstName" name="firstName" placeholder='John' required
           onChange={(e) => handleChanges(e)} /><br></br>
 
         <label htmlFor="lastName">Last Name</label>
-        <input type="text" id="lastName" name="lastName" required
+        <input type="text" id="lastName" name="lastName" placeholder='Smith' required
           onChange={(e) => handleChanges(e)} /><br></br>
 
         <label htmlFor="email">Email</label>
-        <input type="email" id="email" name="email" required
+        <input type="email" id="email" name="email" placeholder='JohnSmith@example.com' required
           onChange={(e) => handleChanges(e)} /><br></br>
 
         <label htmlFor="password">Password</label>
         <input type="password" id="password" name="password" required
-          onChange={(e) => handleChanges(e)} /><br></br>
+          onChange={(e) => handleChanges(e)} /> <br></br>
+        {errorMessagePass && <p className="error">{errorMessagePass}</p>}
 
         <label htmlFor="confirmPassword">Confirm Password</label>
         <input type="password" id="confirmPassword" name="confirmPassword" required
