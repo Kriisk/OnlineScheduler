@@ -1,12 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router";
+import Button from "react-bootstrap/Button";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const HomePage = () => {
   return (
     <div className="flex justify-center items-center h-screen">
-      <Button>
-        <Link to="/signup">Sign Up</Link>
-      </Button>
+      <Button type="button" href="/signup">Sign Up</Button>
     </div>
   );
 };
