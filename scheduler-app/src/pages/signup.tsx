@@ -13,7 +13,7 @@ const SignUpPage = () => {
   const [errorMessagePassConfirm, setErrorMessagePassConfirm] = useState<string | null>(null);
   const [errorMessageEmail, setErrorMessageEmail] = useState<string | null>(null);
 
-  let valid = true; //set to false after testing
+  let valid = false; //set to false after testing
 
   const [data, setData] = useState({
     firstName: '',
@@ -44,12 +44,37 @@ const SignUpPage = () => {
     let item = event.target.value;
     if (item === "") {
       setErrorMessagePass("Please enter a password");
+      valid = false;
     }
     if (validator.isStrongPassword(item, {
       minLength: 8, minLowercase: 1,
       minUppercase: 1, minNumbers: 1, minSymbols: 0
     }) === false && item.length > 0) {
       setErrorMessagePass("Password not strong enough, must include: 8 characters, 1 uppercase, 1 number.");
+      valid = false;
+    }
+    if (validator.isStrongPassword(item, {
+      minLength: 8, minLowercase: 1,
+      minUppercase: 1, minNumbers: 1, minSymbols: 0
+    }) && item.length > 0) {
+      setErrorMessagePass(null);
+      valid = true;
+    }
+  }
+
+  const handlePassConfirm = (e: any) => {
+    setErrorMessagePassConfirm(null);
+    setData({ ...data, [e.target.name]: e.target.value });
+  }
+
+  const handlePassConfirmError = (e: any) => {
+    if (data.password !== e.target.value) {
+      setErrorMessagePassConfirm("Passwords do not match");
+      valid = false;
+    }
+    if (data.password === e.target.value) {
+      setErrorMessagePassConfirm(null);
+      valid = true;
     }
   }
 
@@ -73,16 +98,14 @@ const SignUpPage = () => {
         <input type="password" id="password" name="password" required
           onChange={(e) => handlePassword(e)}
           onBlur={handlePasswordError} /> <br></br>
-        {errorMessagePass && (
-          <Alert variant='danger'>
-            {errorMessagePass}
-          </Alert>
-        )}
+        {errorMessagePass && (<Alert variant='danger'>{errorMessagePass}</Alert>)}
 
 
         <label htmlFor="confirmPassword">Confirm Password</label>
         <input type="password" id="confirmPassword" name="confirmPassword" required
-          onChange={(e) => handleChanges(e)} /><br></br>
+          onChange={(e) => handlePassConfirm(e)}
+          onBlur={(e) => handlePassConfirmError(e)} /><br></br>
+        {errorMessagePassConfirm && (<Alert variant='danger'>{errorMessagePassConfirm}</Alert>)}
 
         <Button type="submit" variant="primary">Sign Up</Button>
         <Button type="reset" variant='danger'>Reset</Button>
