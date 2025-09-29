@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import validator from 'validator';
 
-import './signup.css';
+import './basic.css';
 
 
 
@@ -20,7 +20,7 @@ const SignUpPage = () => {
     lastName: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    //confirmPassword: ''
   })
 
   const handleChanges = (e: any) => {
@@ -62,9 +62,9 @@ const SignUpPage = () => {
     }
   }
 
-  const handlePassConfirm = (e: any) => {
+  const handlePassConfirm = () => {
     setErrorMessagePassConfirm(null);
-    setData({ ...data, [e.target.name]: e.target.value });
+    //setData({ ...data, [e.target.name]: e.target.value });
   }
 
   const handlePassConfirmError = (e: any) => {
@@ -78,8 +78,24 @@ const SignUpPage = () => {
     }
   }
 
+  const handleEmailError = (e: any) => {
+    if (validator.isEmail(e.target.value)) {
+      setErrorMessageEmail(null);
+      valid = true;
+    } else {
+      setErrorMessageEmail("Please enter a valid email");
+      valid = false;
+    }
+  }
+
+  const handleEmail = (e: any) => {
+    setErrorMessageEmail(null);
+    setData({ ...data, [e.target.name]: e.target.value });
+  }
+
   return (
     <div className="container">
+      <Button type="button" href="/">Home</Button>
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="firstName">First Name</label>
@@ -92,7 +108,9 @@ const SignUpPage = () => {
 
         <label htmlFor="email">Email</label>
         <input type="email" id="email" name="email" placeholder='JohnSmith@example.com' required
-          onChange={(e) => handleChanges(e)} /><br></br>
+          onChange={(e) => handleEmail(e)}
+          onBlur={(e) => handleEmailError(e)} /><br></br>
+        {errorMessageEmail && (<Alert variant='danger'>{errorMessageEmail}</Alert>)}
 
         <label htmlFor="password">Password</label>
         <input type="password" id="password" name="password" required
@@ -103,7 +121,7 @@ const SignUpPage = () => {
 
         <label htmlFor="confirmPassword">Confirm Password</label>
         <input type="password" id="confirmPassword" name="confirmPassword" required
-          onChange={(e) => handlePassConfirm(e)}
+          onChange={() => handlePassConfirm()}
           onBlur={(e) => handlePassConfirmError(e)} /><br></br>
         {errorMessagePassConfirm && (<Alert variant='danger'>{errorMessagePassConfirm}</Alert>)}
 

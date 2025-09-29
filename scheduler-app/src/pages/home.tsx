@@ -5,6 +5,7 @@ const HomePage = () => {
   return (
     <div className="flex justify-center items-center h-screen">
       <Button type="button" href="/signup">Sign Up</Button>
+      <Button type="button" href="/login">Log In</Button>
     </div>
   );
 };
